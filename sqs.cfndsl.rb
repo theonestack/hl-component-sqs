@@ -23,9 +23,16 @@ CloudFormation do
 
     end
 
-    Output('QueueUrl', Ref(queue['name']))
+    Output("QueueUrl") {
+      Value(Ref(queue['name']))
+      Export FnSub("${EnvironmentName}-#{component_name}-#{queue['name']}Url")
+    }
+
+    Output("QueueName") {
+      Value(FnGetAtt(queue['name'], 'QueueName'))
+      Export FnSub("${EnvironmentName}-#{component_name}-#{queue['name']}Name")
+    }
     Output('QueueArn', FnGetAtt(queue['name'], 'Arn'))
-    Output('QueueName', FnJoin("-", [Ref('EnvironmentName'), queue['name']]))
 
   end if (defined? queues) && (!queues.nil?)
 
