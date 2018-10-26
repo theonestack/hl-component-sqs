@@ -1,5 +1,11 @@
 CloudFormation do
 
+  tags = []
+  tags << { Key: 'Environment', Value: Ref(:EnvironmentName) }
+  tags << { Key: 'EnvironmentType', Value: Ref(:EnvironmentType) }
+
+  extra_tags.each { |key,value| tags << { Key: key, Value: value } } if defined? extra_tags
+
   queues.each do |queue|
     SQS_Queue(queue['name']) do
       QueueName FnJoin("-", [Ref('EnvironmentName'), queue['name']]) unless (queue.has_key?('generated_name')) && (queue['generated_name'])
@@ -20,6 +26,8 @@ CloudFormation do
         FifoQueue true
         ContentBasedDeduplication queue['content_based_deduplication'] if queue.has_key?('content_based_deduplication')
       end
+
+      Property('Tags', tags + [{ Key: 'Name', Value: FnJoin('-', [ Ref(:EnvironmentName), queue['name'] ]) }])
 
     end
 
