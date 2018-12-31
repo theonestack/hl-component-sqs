@@ -5,9 +5,9 @@ CloudFormation do
   tags << { Key: 'EnvironmentType', Value: Ref(:EnvironmentType) }
 
   extra_tags.each { |key,value| tags << { Key: key, Value: value } } if defined? extra_tags
-
+  filter = /[^0-9a-z ]/i
   queues.each do |queue|
-      logical_id = queue['name'].gsub(/[^0-9a-z ]/i, '')
+      logical_id = queue['name'].gsub(filter, '')
       SQS_Queue(logical_id) do
           QueueName FnJoin("-", [Ref('EnvironmentName'), queue['name']]) unless (queue.has_key?('generated_name')) && (queue['generated_name'])
           VisibilityTimeout queue['visibility_timeout'] if queue.has_key?('visibility_timeout')
@@ -18,7 +18,7 @@ CloudFormation do
 
           if queue.has_key?('redrive_policy')
           RedrivePolicy ({
-              deadLetterTargetArn: FnGetAtt(queue['redrive_policy']['queue'].gsub(/[^0-9a-z ]/i, ''), 'Arn'),
+              deadLetterTargetArn: FnGetAtt(queue['redrive_policy']['queue'].gsub(filter, ''), 'Arn'),
               maxReceiveCount: queue['redrive_policy']['count']
           })
           end
