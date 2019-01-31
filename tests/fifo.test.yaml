@@ -1,0 +1,13 @@
+test_metadata:
+  type: config
+  name: fifo queues
+  description: using the fifo config settings
+
+queues:
+  -
+    name: queue1
+    fifo_queue: true
+    content_based_deduplication: true
+  -
+    name: queue2
+    fifo_queue: true

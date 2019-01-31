@@ -1,0 +1,9 @@
+test_metadata:
+  type: config
+  name: queues with default config
+  description: Use the default config and name the queues
+
+queues:
+  - name: queue1
+  - name: queue2
+  - name: queue3
