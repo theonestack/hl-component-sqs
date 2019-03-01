@@ -15,6 +15,8 @@ CloudFormation do
           MaximumMessageSize queue['maximum_message_size'] if queue.has_key?('maximum_message_size')
           MessageRetentionPeriod queue['message_retention_period'] if queue.has_key?('message_retention_period')
           ReceiveMessageWaitTimeSeconds queue['receive_message_wait_time_seconds'] if queue.has_key?('receive_message_wait_time_seconds')
+          KmsMasterKeyId queue['kms_master_key'] if queue.has_key?('kms_master_key')
+          KmsDataKeyReusePeriodSeconds queue['kms_data_key_reuse_seconds'] if queue.has_key?('kms_data_key_reuse_seconds')
 
           if queue.has_key?('redrive_policy')
           RedrivePolicy ({

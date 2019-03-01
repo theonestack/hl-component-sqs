@@ -7,6 +7,9 @@ queues:
     delay_seconds: 20
     maximum_message_size: 1024
     message_retention_period: 300
-    receive_message_wait_time_seconds: 120
+    receive_message_wait_time_seconds: 20
+    # kms_master_key: alias/aws/sqs
   -
     name: queue2
+    # kms_master_key: alias/aws/sqs
+    # kms_data_key_reuse_seconds: 3600
