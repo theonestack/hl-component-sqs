@@ -43,13 +43,7 @@ CloudFormation do
           Export FnSub("${EnvironmentName}-#{component_name}-#{logical_id}Name")
       }
 
-<<<<<<< HEAD
       Output("#{logical_id}QueueArn", FnGetAtt(logical_id, 'Arn'))
-=======
-    Output('QueueUrl', Ref(resource_name))
-    Output('QueueArn', FnGetAtt(resource_name, 'Arn'))
-    Output('QueueName', FnJoin("-", [Ref('EnvironmentName'), queue['name']]))
->>>>>>> restructure tests in to tests directory
 
   end if (defined? queues) && (!queues.nil?)
 
