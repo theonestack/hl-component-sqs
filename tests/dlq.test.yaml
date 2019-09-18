@@ -1,0 +1,17 @@
+test_metadata:
+  type: config
+  name: dlq
+  description: |
+    create a queue that will push failed messages to
+    a dead letter queue after 10 failed attempts.
+
+queues:
+  -
+    name: my-queue
+    message_retention_period: 600
+    redrive_policy:
+      queue: my-queue-dlq
+      count: 10
+  -
+    name: my-queue-dlq
+    message_retention_period: 84600

@@ -1,0 +1,20 @@
+test_metadata:
+  type: config
+  name: queues with config overrides
+  description: Create 2 queues with name and override available config
+
+queues:
+  -
+    name: queue1
+    visibility_timeout: 60
+    delay_seconds: 20
+    maximum_message_size: 1024
+    message_retention_period: 300
+    receive_message_wait_time_seconds: 120
+  -
+    name: queue2
+    visibility_timeout: 120
+    delay_seconds: 60
+    maximum_message_size: 256
+    message_retention_period: 84600
+    receive_message_wait_time_seconds: 600
