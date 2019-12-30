@@ -4,8 +4,8 @@ CloudFormation do
   tags << { Key: 'Environment', Value: Ref(:EnvironmentName) }
   tags << { Key: 'EnvironmentType', Value: Ref(:EnvironmentType) }
 
-  extra_tags = external_parameters.fetch(:extra_tags, [])
-  extra_tags.each { |key,value| tags << { Key: key, Value: value } } if defined? extra_tags
+  extra_tags = external_parameters.fetch(:extra_tags, {})
+  extra_tags.each { |key,value| tags << { Key: key, Value: value } }
 
   queues = external_parameters.fetch(:queues, [])
   filter = /[^0-9a-z ]/i
@@ -48,6 +48,6 @@ CloudFormation do
 
       Output("#{logical_id}QueueArn", FnGetAtt(logical_id, 'Arn'))
 
-  end if (defined? queues) && (!queues.nil?)
+  end
 
 end
