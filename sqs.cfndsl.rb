@@ -38,12 +38,12 @@ CloudFormation do
 
       Output("#{logical_id}QueueUrl") {
           Value(Ref(logical_id))
-          Export FnSub("${EnvironmentName}-#{component_name}-#{logical_id}Url")
+          Export FnSub("${EnvironmentName}-#{external_parameters[:component_name]}-#{logical_id}Url")
       }
 
       Output("#{logical_id}QueueName") {
           Value(FnGetAtt(logical_id, 'QueueName'))
-          Export FnSub("${EnvironmentName}-#{component_name}-#{logical_id}Name")
+          Export FnSub("${EnvironmentName}-#{external_parameters[:component_name]}-#{logical_id}Name")
       }
 
       Output("#{logical_id}QueueArn", FnGetAtt(logical_id, 'Arn'))
