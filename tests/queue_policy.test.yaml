@@ -1,0 +1,25 @@
+test_metadata:
+  type: config
+  name: queue_policy
+  description: set the description for your test
+
+test_parameters:
+  Bucket: MyBucket
+  ReceivingAccount: 000000000000
+
+queues:
+  -
+    name: Test
+    message_retention_period: 3600 
+    policies:
+      S3EventTrigger:
+        condition:
+          ArnEquals:
+            aws:SourceArn:
+              Fn::Sub: arn:aws:s3:::${Bucket}
+      CrossAccount:
+        action:
+          - sqs:ReceiveMessage
+        principal:
+          AWS:
+            - Fn::Sub: "arn:aws:iam::${ReceivingAccount}:role/role1"
