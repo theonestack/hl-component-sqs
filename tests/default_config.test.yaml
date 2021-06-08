@@ -1,6 +1,6 @@
 test_metadata:
   type: config
-  name: queues with default config
+  name: default_config
   description: Use the default config and name the queues
 
 queues:

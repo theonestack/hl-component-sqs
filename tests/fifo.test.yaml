@@ -1,6 +1,6 @@
 test_metadata:
   type: config
-  name: fifo queues
+  name: fifo
   description: using the fifo config settings
 
 queues:
