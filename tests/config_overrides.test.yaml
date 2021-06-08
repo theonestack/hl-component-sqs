@@ -1,6 +1,6 @@
 test_metadata:
   type: config
-  name: queues with config overrides
+  name: config_overrides
   description: Create 2 queues with name and override available config
 
 queues:
