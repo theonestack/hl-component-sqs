@@ -1,0 +1,14 @@
+test_metadata:
+  type: config
+  name: topic_subscriptions
+  description: Subscribe queues to SNS topics
+
+queues:
+  - name: queue1
+    topics:
+      - topic_arn1
+      - topic_arn2
+  - name: queue2
+    topics:
+      - topic_arn1
+  - name: queue3

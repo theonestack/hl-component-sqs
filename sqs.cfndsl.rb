@@ -66,6 +66,16 @@ CloudFormation do
           Queues [Ref(logical_id)]
         end 
       end
+
+      if queue.has_key?('topics')
+        queue['topics'].each_with_index do |topic, i|
+          SNS_Subscription("#{logical_id}Subscription#{i}") do
+            TopicArn topic
+            Protocol 'sqs'
+            Endpoint FnGetAtt(logical_id, 'Arn')
+          end
+        end
+      end
       
       Output("#{logical_id}QueueUrl") {
           Value(Ref(logical_id))
