@@ -72,6 +72,23 @@ describe 'compiled component sqs' do
       
     end
     
+    context "queue1Policy" do
+      let(:resource) { template["Resources"]["queue1Policy"] }
+
+      it "is of type AWS::SQS::QueuePolicy" do
+          expect(resource["Type"]).to eq("AWS::SQS::QueuePolicy")
+      end
+      
+      it "to have property PolicyDocument" do
+          expect(resource["Properties"]["PolicyDocument"]).to eq({"Version"=>"2012-10-17", "Statement"=>[{"Sid"=>"queue1Subscription0", "Action"=>"SQS:SendMessage", "Resource"=>{"Fn::GetAtt"=>["queue1", "Arn"]}, "Effect"=>"Allow", "Principal"=>{"AWS"=>{"Ref"=>"AWS::AccountId"}}, "Condition"=>{"ArnEquals"=>{"aws:SourceArn"=>"topic_arn1"}}}, {"Sid"=>"queue1Subscription1", "Action"=>"SQS:SendMessage", "Resource"=>{"Fn::GetAtt"=>["queue1", "Arn"]}, "Effect"=>"Allow", "Principal"=>{"AWS"=>{"Ref"=>"AWS::AccountId"}}, "Condition"=>{"ArnEquals"=>{"aws:SourceArn"=>"topic_arn2"}}}]})
+      end
+      
+      it "to have property Queues" do
+          expect(resource["Properties"]["Queues"]).to eq([{"Ref"=>"queue1"}])
+      end
+      
+    end
+    
     context "queue2" do
       let(:resource) { template["Resources"]["queue2"] }
 
@@ -106,6 +123,23 @@ describe 'compiled component sqs' do
       
       it "to have property Endpoint" do
           expect(resource["Properties"]["Endpoint"]).to eq({"Fn::GetAtt"=>["queue2", "Arn"]})
+      end
+      
+    end
+    
+    context "queue2Policy" do
+      let(:resource) { template["Resources"]["queue2Policy"] }
+
+      it "is of type AWS::SQS::QueuePolicy" do
+          expect(resource["Type"]).to eq("AWS::SQS::QueuePolicy")
+      end
+      
+      it "to have property PolicyDocument" do
+          expect(resource["Properties"]["PolicyDocument"]).to eq({"Version"=>"2012-10-17", "Statement"=>[{"Sid"=>"queue2Subscription0", "Action"=>"SQS:SendMessage", "Resource"=>{"Fn::GetAtt"=>["queue2", "Arn"]}, "Effect"=>"Allow", "Principal"=>{"AWS"=>{"Ref"=>"AWS::AccountId"}}, "Condition"=>{"ArnEquals"=>{"aws:SourceArn"=>"topic_arn1"}}}]})
+      end
+      
+      it "to have property Queues" do
+          expect(resource["Properties"]["Queues"]).to eq([{"Ref"=>"queue2"}])
       end
       
     end
