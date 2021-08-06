@@ -36,9 +36,29 @@ CloudFormation do
           
       end
 
-      if queue.has_key?('policies')
-        queue_policies = []
+      queue_policies = []
 
+      if queue.has_key?('topics')
+        queue['topics'].each_with_index do |topic, i|
+          SNS_Subscription("#{logical_id}Subscription#{i}") do
+            TopicArn topic
+            Protocol 'sqs'
+            Endpoint FnGetAtt(logical_id, 'Arn')
+          end
+          statement = {
+            Sid: "#{logical_id}Subscription#{i}",
+            Action: 'SQS:SendMessage',
+            Resource: FnGetAtt(logical_id,'Arn'),
+            Effect: 'Allow',
+            Principal: { AWS: Ref('AWS::AccountId')},
+            Condition: { ArnEquals: { "aws:SourceArn": topic }}
+          }
+          queue_policies << statement
+        end
+      end
+
+
+      if queue.has_key?('policies')  
         queue['policies'].each do |name,policy|
           resources = policy.fetch('resource', FnGetAtt(logical_id,'Arn'))
           resources = (resources.kind_of?(Array) ? resources : [resources])
@@ -57,7 +77,9 @@ CloudFormation do
           
           queue_policies << statement
         end
-        
+      end
+
+      if queue_policies.any?
         SQS_QueuePolicy("#{logical_id}Policy") do
           PolicyDocument({
             Version: '2012-10-17',
@@ -65,16 +87,6 @@ CloudFormation do
           })
           Queues [Ref(logical_id)]
         end 
-      end
-
-      if queue.has_key?('topics')
-        queue['topics'].each_with_index do |topic, i|
-          SNS_Subscription("#{logical_id}Subscription#{i}") do
-            TopicArn topic
-            Protocol 'sqs'
-            Endpoint FnGetAtt(logical_id, 'Arn')
-          end
-        end
       end
       
       Output("#{logical_id}QueueUrl") {
