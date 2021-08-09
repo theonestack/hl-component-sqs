@@ -50,13 +50,56 @@ CloudFormation do
             Action: 'SQS:SendMessage',
             Resource: FnGetAtt(logical_id,'Arn'),
             Effect: 'Allow',
-            Principal: { AWS: Ref('AWS::AccountId')},
+            Principal: { Service: 'sns.amazonaws.com'},
             Condition: { ArnEquals: { "aws:SourceArn": topic }}
           }
           queue_policies << statement
         end
       end
 
+      if queue.has_key?('events')
+        queue['events'].each do |name,rule|
+          target = {
+            Arn: FnGetAtt(logical_id, 'Arn'),
+            Id: logical_id
+          }
+          target['Input'] = rule.fetch('input', nil)
+          target['InputPath'] = rule.fetch('input_path', nil)
+
+          if rule.has_key?('input_transformer')
+            target['InputTransformer'] = {
+              InputPathsMap: rule['input_transformer']['map'],
+              InputTemplate: rule['input_transformer']['template']
+            }
+          end
+          if rule.has_key?('message_group_id')
+            target['SqsParameters'] = { MessageGroupId: rule['message_group_id']}
+          end
+          
+          rule_id = name.gsub(filter, '')
+          Events_Rule(rule_id) do
+            Name rule.fetch('name', name)
+            Description rule.fetch('description', '')
+            if rule.has_key?('schedule')
+              ScheduleExpression rule['schedule']
+            else
+              EventPattern rule['pattern']
+            end
+            State rule.fetch('state', 'ENABLED')
+            Targets [target.compact]
+          end
+
+          statement = {
+            Sid: "#{logical_id}Event#{rule_id}",
+            Action: 'SQS:SendMessage',
+            Resource: FnGetAtt(logical_id,'Arn'),
+            Effect: 'Allow',
+            Principal: { Service: 'events.amazonaws.com'},
+            Condition: { ArnEquals: { "aws:SourceArn": FnGetAtt(rule_id, 'Arn')}}
+          }
+          queue_policies << statement
+        end
+      end
 
       if queue.has_key?('policies')  
         queue['policies'].each do |name,policy|
