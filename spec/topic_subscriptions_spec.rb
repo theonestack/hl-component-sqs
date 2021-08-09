@@ -80,7 +80,7 @@ describe 'compiled component sqs' do
       end
       
       it "to have property PolicyDocument" do
-          expect(resource["Properties"]["PolicyDocument"]).to eq({"Version"=>"2012-10-17", "Statement"=>[{"Sid"=>"queue1Subscription0", "Action"=>"SQS:SendMessage", "Resource"=>{"Fn::GetAtt"=>["queue1", "Arn"]}, "Effect"=>"Allow", "Principal"=>{"AWS"=>{"Ref"=>"AWS::AccountId"}}, "Condition"=>{"ArnEquals"=>{"aws:SourceArn"=>"topic_arn1"}}}, {"Sid"=>"queue1Subscription1", "Action"=>"SQS:SendMessage", "Resource"=>{"Fn::GetAtt"=>["queue1", "Arn"]}, "Effect"=>"Allow", "Principal"=>{"AWS"=>{"Ref"=>"AWS::AccountId"}}, "Condition"=>{"ArnEquals"=>{"aws:SourceArn"=>"topic_arn2"}}}]})
+          expect(resource["Properties"]["PolicyDocument"]).to eq({"Version"=>"2012-10-17", "Statement"=>[{"Sid"=>"queue1Subscription0", "Action"=>"SQS:SendMessage", "Resource"=>{"Fn::GetAtt"=>["queue1", "Arn"]}, "Effect"=>"Allow", "Principal"=>{"Service"=>"sns.amazonaws.com"}, "Condition"=>{"ArnEquals"=>{"aws:SourceArn"=>"topic_arn1"}}}, {"Sid"=>"queue1Subscription1", "Action"=>"SQS:SendMessage", "Resource"=>{"Fn::GetAtt"=>["queue1", "Arn"]}, "Effect"=>"Allow", "Principal"=>{"Service"=>"sns.amazonaws.com"}, "Condition"=>{"ArnEquals"=>{"aws:SourceArn"=>"topic_arn2"}}}]})
       end
       
       it "to have property Queues" do
@@ -135,7 +135,7 @@ describe 'compiled component sqs' do
       end
       
       it "to have property PolicyDocument" do
-          expect(resource["Properties"]["PolicyDocument"]).to eq({"Version"=>"2012-10-17", "Statement"=>[{"Sid"=>"queue2Subscription0", "Action"=>"SQS:SendMessage", "Resource"=>{"Fn::GetAtt"=>["queue2", "Arn"]}, "Effect"=>"Allow", "Principal"=>{"AWS"=>{"Ref"=>"AWS::AccountId"}}, "Condition"=>{"ArnEquals"=>{"aws:SourceArn"=>"topic_arn1"}}}]})
+          expect(resource["Properties"]["PolicyDocument"]).to eq({"Version"=>"2012-10-17", "Statement"=>[{"Sid"=>"queue2Subscription0", "Action"=>"SQS:SendMessage", "Resource"=>{"Fn::GetAtt"=>["queue2", "Arn"]}, "Effect"=>"Allow", "Principal"=>{"Service"=>"sns.amazonaws.com"}, "Condition"=>{"ArnEquals"=>{"aws:SourceArn"=>"topic_arn1"}}}]})
       end
       
       it "to have property Queues" do

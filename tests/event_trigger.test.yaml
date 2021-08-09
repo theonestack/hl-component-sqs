@@ -1,0 +1,43 @@
+test_metadata:
+  type: config
+  name: event_trigger
+  description: set the description for your test
+
+
+queues:
+  - name: queue1
+    events:
+      testevent1:
+        description: Test event1
+        schedule: rate(5 minutes)
+        input: '{"event":"test"}'
+        message_group_id: default
+  - name: queue2
+    events:
+      testevent2:
+        description: Test event2
+        schedule: cron(* * * * *)
+        input_path: $.detail
+        message_group_id: default
+  - name: queue3
+    events:
+      testevent3:
+        description: Test event3
+        pattern: '{"source": ["aws.ec2"]}'
+        input_transformer:
+          map: 
+            instance: "$.detail.instance"
+            status: "$.detail.status"
+          template: "<instance> is in state <status>"
+        message_group_id: default
+  - name: queue4
+    events:
+      testevent4:
+        schedule: cron(* * * * *)
+        state: ENABLED
+        input: '{"event":"test"}'
+      testevent5:
+        pattern: '{"source": ["aws.ec2"]}'
+        input: '{"event":"test"}'
+
+
