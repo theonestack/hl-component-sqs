@@ -18,8 +18,7 @@
 | {logical_id}QueueArn | The queue ARN | false
 
 ## Included Components
-
-[lib-ec2](https://github.com/theonestack/hl-component-lib-ec2)
+<none>
 ## Example Configuration
 ### Highlander
 ```
