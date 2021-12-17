@@ -1,26 +1,58 @@
-[![Build Status](https://travis-ci.org/theonestack/hl-component-sqs.svg?branch=master)](https://travis-ci.org/theonestack/hl-component-sqs)
+# sqs CfHighlander component
 
-### Cfhighlander sqs component
+## Build status
+![cftest workflow](https://github.com/theonestack/hl-component-sqs/actions/workflows/rspec.yaml/badge.svg)
+## Parameters
 
-```bash
+| Name | Use | Default | Global | Type | Allowed Values |
+| ---- | --- | ------- | ------ | ---- | -------------- |
+| EnvironmentName | Tagging | dev | true | string
+| EnvironmentType | Tagging | development | true | string | ['development','production']
 
-# install highlander gem
-$ gem install cfhighlander
+## Outputs/Exports
 
-# build and validate standalone component
-$ cfhighlander cfcompile --validate sqs
+| Name | Value | Exported |
+| ---- | ----- | -------- |
+| {logical_id}QueueUrl | The URL to be used to interact with the SQS queue | true
+| {logical_id}QueueName | The full queue name | true
+| {logical_id}QueueArn | The queue ARN | false
+
+## Included Components
+<none>
+## Example Configuration
+### Highlander
+```
+Component name:'sqs', template: 'sqs'
 
 ```
 
+### Elasticsearch Configuration
+```
+queues:
+  -
+    name: app1Queue
+    visibility_timeout: 10
+    delay_seconds: 1
+    maximum_message_size: 4096 // An integer in bytes from 1,024 bytes (1 KiB) up to 262,144 bytes (256 KiB).
+```
 
-### Parameters
+## Cfhighlander Setup
 
-TBD
+install cfhighlander [gem](https://github.com/theonestack/cfhighlander)
 
-### Configuration options
+```bash
+gem install cfhighlander
+```
 
-TBD
+or via docker
 
-### Outputs
+```bash
+docker pull theonestack/cfhighlander
+```
+## Testing Components
 
-TBD
+Running the tests
+
+```bash
+cfhighlander cftest sqs
+```
